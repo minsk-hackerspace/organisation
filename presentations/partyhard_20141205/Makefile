@@ -1,15 +1,23 @@
 
 NAME=slides
 
-.PHONY: all
+.PHONY: all images
 all: $(NAME).pdf
 
-%.pdf: %.tex logo.eps
+%.pdf: %.tex
 	pdflatex $<
 
-logo.eps:
-	make -C ../../logo logo.eps
-	cp ../../logo/logo.eps ./
+%.pdf: %.eps
+	epstopdf $<
+
+$(NAME).tex: logo.pdf images
+
+images: imget.sh
+	bash imget.sh
+
+logo.pdf:
+	make -C ../../logo logo.pdf
+	cp ../../logo/logo.pdf ./
 
 .PHONY: clean
 clean:
