@@ -1,0 +1,222 @@
+<svg version="1.1" baseProfile="full" xmlns="http://www.w3.org/2000/svg">
+
+	<script>
+		var svg = document.documentElement;
+
+		var X_color = '#000000';
+		var M_color = 'blue';
+		var pcb_track_color = '#D0D0D0';
+		var drill_color = '#FFFFFF';
+		var highlight_track_color = '#FFD700';
+
+		function highlightON (evt) {
+			var el = evt.target.parentNode.firstChild;
+			do {
+				el.setAttributeNS(null, 'fill', highlight_track_color);
+				el = el.nextSibling;
+			} while (el);
+		}
+		function highlightOFF (evt) {
+			var el = evt.target.parentNode.firstChild;
+			do {
+				el.setAttributeNS(null, 'fill', pcb_track_color);
+				el = el.nextSibling;
+			} while (el);
+		}
+
+		var W = 800;
+		var H = 5/6 * W;
+		var w1 = 1/5 * W; // ширина треугольного бокового проема в букве Х
+		var h1 = 1/3 * H; // высота треугольного бокового проема в букве Х
+		var w2 = 1/3 * W; // ширина прямоугольного проема в букве Х
+		var h2 = 1/5 * H; // высота прямоугольного проема в букве Х
+
+		var w3 = w2; // ширина буквы М
+		var h3 = 4/9 * H; // высота буквы М
+		var w4 = 1/5 * w3; // ширина полосы которой рисуется буква М
+		var h4 = 4/5 * h3; // высота верхнего проема в букве М
+		var h5 = 1/2 * h3; // высота нижних проемов в букве М
+
+		var r1 = 1/15 * h2; // радиус больших отверстий
+		var r2 = 1/4 * w4; // радиус площадок
+		var r3 = 1/2 * r2; // радиус малых отверстий
+
+		var d1 = 4/5 * r3; // половина ширины дорожки
+		var l1 = 1/6 * w3; // длина горизонтального участка дорожки ("нога" буквы М)
+		var dl1 = 3/4 * d1; // выступ для наклона соединения горизонтальной и диагональной дорожек
+		var l2 = 1/2 * h2; // длина вертикального участка дорожки
+		var dl2 = 3/4 * d1; // выступ для наклона соединения вертикальной и диагональной дорожек
+
+		// координаты большого отверстия:
+		var xR1 = 3 * r1;
+		var yR1 = 3 * r1;
+
+		var yM1 = (H - h3)/2; // расстояние от верха до начала буквы М
+		var xX1 = (W-w2)/2; // расстояние до верхнего проема в букве Х
+		var yX1 = (H - h1)/2; // расстояние до бокового проема в букве Х
+
+		// координата первого малого отверстия на букве Х:
+		var xR2 = 1/5 * xX1;
+		var yR2 = 4/5 * h2;
+		var dxR2 = 4 * r2; // расстояние между отверситями на букве Х
+
+		// координата первого малого отверстия на букве М:
+		var xR3 = xX1 + 1/2 * w4;
+		var yR3 = yM1 + 1/16 * h3;
+		var dyR3 = 1/8 * h3; // расстояние между отверстиями на букве М
+
+		var X_poly_points = [
+			{x: 0, 		y: 0 },
+			{x: xX1, 	y: 0 },
+			{x: xX1, 	y: h2 },
+			{x: xX1+w2, 	y: h2 },
+			{x: xX1+w2, 	y: 0 },
+			{x: W, 		y: 0 },
+			{x: W, 		y: yX1 },
+			{x: W-w1, 	y: H/2 },
+			{x: W, 		y: yX1+h1 },
+
+			{x: W, 		y: H },
+
+			{x: W-xX1,	y: H },
+			{x: W-xX1, 	y: H-h2 },
+			{x: xX1, 	y: H-h2 },
+			{x: xX1, 	y: H },
+			{x: 0, 		y: H },
+			{x: 0, 		y: H-yX1 },
+			{x: w1, 	y: H/2 },
+			{x: 0, 		y: yX1 }
+		];
+
+		var M_poly_points = [
+			{x: xX1,		y: yM1 },
+			{x: xX1+w4,		y: yM1 },
+			{x: xX1+w3/2,		y: yM1+h4 },
+			{x: xX1+w3-w4,		y: yM1 },
+			{x: xX1+w3,		y: yM1 },
+
+			{x: xX1+w3,		y: yM1+h3  },
+			{x: xX1+w3-w4,		y: yM1+h3 },
+			{x: xX1+w3-w4,		y: yM1+h3-h5 },
+			{x: xX1+(w3-w4)/2+w4, 	y: yM1+h3 },
+			{x: xX1+(w3-w4)/2, 	y: yM1+h3 },
+			{x: xX1+w4,		y: yM1+h3-h5 },
+			{x: xX1+w4,		y: yM1+h3 },
+			{x: xX1,		y: yM1+h3 }
+		];
+
+		function createPolyOn (root, points, fill_color)
+		{
+			var points_str = '';
+
+			points.forEach( function(entry) {
+				points_str += entry.x + ',' + entry.y + ' ';
+			});
+
+			// console.log(points_str);
+
+			return createOn(root, 'polygon', {points: points_str, fill: fill_color});
+		}
+
+		createPolyOn(svg, X_poly_points, X_color);
+		createPolyOn(svg, M_poly_points, M_color);
+
+		createOn(svg, 'circle', {
+			cx: xR1, cy: yR1,
+			r: r1,
+			fill: drill_color
+		});
+		createOn(svg, 'circle', {
+			cx: W - xR1, cy: yR1,
+			r: r1,
+			fill: drill_color
+		});
+		createOn(svg, 'circle', {
+			cx: W - xR1, cy: H - yR1,
+			r: r1,
+			fill: drill_color
+		});
+		createOn(svg, 'circle', {
+			cx: xR1, cy: H - yR1,
+			r: r1,
+			fill: drill_color
+		});
+
+		function create_pcb_track (root, pM, pX)
+		{
+			var g = createOn(root, 'g');
+
+			createOn(g, 'circle', {cx: pM.x, cy: pM.y, r: r2, fill: pcb_track_color});
+			createOn(root, 'circle', {cx: pM.x, cy: pM.y, r: r3, fill: M_color});
+
+			createOn(g, 'circle', {cx: pX.x, cy: pX.y, r: r2, fill: pcb_track_color});
+			createOn(root, 'circle', {cx: pX.x, cy: pX.y, r: r3, fill: X_color});
+
+			var isLeft = pM.x > pX.x;
+			var isUp = pM.y > pX.y;
+
+			var d1x = (isLeft ? d1 : -d1);
+			var d1y = (isUp ? d1 : -d1);
+			var r3x = (isLeft ? r3 : -r3);
+			var r3y = (isUp ? r3 : -r3);
+			var L1 = (isLeft ? l1 : -l1);
+			var dL1 = (isLeft ? dl1 : -dl1);
+			var L2 = (isUp ? l2 : -l2);
+			var dL2 = (isUp ? dl2 : -dl2);
+
+			var track_poly_points = [
+				{x: pX.x - d1x, 		y: pX.y + r3y },
+				{x: pX.x + d1x, 		y: pX.y + r3y },
+
+				{x: pX.x + d1x, 		y: pX.y + r3y + L2 },
+				{x: pM.x - (r3x + L1), 		y: pM.y - d1y },
+
+				{x: pM.x - r3x, 		y: pM.y - d1y },
+				{x: pM.x - r3x, 		y: pM.y + d1y },
+
+				{x: pM.x - (r3x + L1 + dL1), 	y: pM.y + d1y },
+				{x: pX.x - d1x, 		y: pX.y + r3y + L2 + dL2 }
+			];
+
+			createPolyOn(g, track_poly_points, pcb_track_color);
+
+			g.setAttributeNS(null, 'onmouseover', 'highlightON(evt)');
+			g.setAttributeNS(null, 'onmouseout', 'highlightOFF(evt)');
+		}
+
+		function create_pcb_bus (root, p1, p2, dx1, dy2)
+		{
+			create_pcb_track(root, {x: p1.x, y: p1.y}, {x: p2.x+3*dx1, y: p2.y});
+			create_pcb_track(root, {x: p1.x, y: p1.y+dy2}, {x: p2.x+2*dx1, y: p2.y});
+			create_pcb_track(root, {x: p1.x, y: p1.y+2*dy2}, {x: p2.x+dx1, y: p2.y});
+			create_pcb_track(root, {x: p1.x, y: p1.y+3*dy2}, {x: p2.x, y: p2.y});
+		}
+
+		create_pcb_bus(svg, {x: xR3, y: yR3}, {x: xR2, y: yR2}, dxR2, dyR3);
+		create_pcb_bus(svg, {x: xR3 + w3 - w4, y: yR3}, {x: W - xR2, y: yR2}, -dxR2, dyR3);
+		create_pcb_bus(svg, {x: xR3 + w3 - w4, y: yR3 + h3 - h3/8}, {x: W - xR2, y: H - yR2}, -dxR2, -dyR3);
+		create_pcb_bus(svg, {x: xR3, y: yR3 + h3 - h3/8}, {x: xR2, y: H - yR2}, dxR2, -dyR3);
+
+		// FROM: http://stackoverflow.com/questions/8320002/how-do-i-manipulate-the-svg-dom-and-create-elements
+		function createOn (root, name, attrs, text)
+		{
+			var doc = root.ownerDocument, svg = root;
+			while (svg.tagName != 'svg') svg = svg.parentNode;
+			var el = doc.createElementNS(svg.namespaceURI, name);
+			for (var a in attrs) {
+				if (!attrs.hasOwnProperty(a))
+					continue;
+				var p = a.split(':');
+				if (p[1])
+					el.setAttributeNS(svg.getAttribute('xmlns:' + p[0]), p[1], attrs[a]);
+				else
+					el.setAttribute(a, attrs[a]);
+			}
+			if (text)
+				el.appendChild(doc.createTextNode(text));
+			return root.appendChild(el);
+		}
+
+	</script>
+
+</svg>

@@ -1,0 +1,6 @@
+
+1) rewrite javascript svg to html: http://stackoverflow.com/questions/3492322/javascript-createelement
+
+
+
+
