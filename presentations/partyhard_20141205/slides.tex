@@ -2,8 +2,6 @@
 \documentclass{beamer}
 \usepackage[utf8x]{inputenc}
 \usepackage[russian]{babel}
-\usepackage{svg}
-\usepackage{epstopdf}
 \usepackage{mathtools}
 
 \usetheme{Warsaw}
@@ -13,7 +11,7 @@
 \date{\today}
 
 \newif\ifplacelogo % create a new conditional
-\placelogotrue
+\placelogofalse % do not place logo on title page (there is usual image)
 \logo{\ifplacelogo\includegraphics[width=0.1\textwidth]{logo}\fi} % replace with your own command
 
 \begin {document}
@@ -28,7 +26,7 @@
 \end{center}
 \end{frame}
 
-\placelogotrue
+\placelogotrue % place logo on every other page
 
 \begin {frame}
 \frametitle {Что такое хакерспейс}
@@ -180,8 +178,6 @@
 Социальная сеть для хакерспейса.
 \end {frame}
 
-
-\placelogofalse
 
 \begin {frame}
 \begin{center}

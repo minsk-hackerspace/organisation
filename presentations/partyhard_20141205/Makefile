@@ -4,11 +4,8 @@ NAME=slides
 .PHONY: all images
 all: $(NAME).pdf
 
-%.pdf: %.tex
+%.pdf: %.tex 
 	pdflatex $<
-
-%.pdf: %.eps
-	epstopdf $<
 
 $(NAME).tex: logo.pdf images
 
@@ -21,5 +18,5 @@ logo.pdf:
 
 .PHONY: clean
 clean:
-	rm -f *.aux *.out *.log *.pdf *.snm *.toc *.nav *.dvi logo.eps
+	rm -f *.aux *.out *.log *.pdf *.snm *.toc *.nav *.dvi *.jpg
 
