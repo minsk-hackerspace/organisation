@@ -28,3 +28,6 @@
 Полезная информация:
 ---
 https://github.com/minsk-hackerspace/organisation/blob/master/pages/info.md
+
+
+Телефоны служб - https://github.com/minsk-hackerspace/organisation/blob/master/pages/tel.md
